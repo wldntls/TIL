@@ -57,7 +57,19 @@
 
 
 
+git init
 
+git add .
+
+git status
+
+git commit -m "Upload github pages"
+
+git remote add origin https://github.com/edukyle/profile.git
+
+git remote -v
+
+git push -u origin master
 
 
 

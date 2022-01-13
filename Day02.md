@@ -1,4 +1,8 @@
-# GitHud 1일차 특강
+# GitHud 2일차 특강
+
+---
+
+
 
 ## 1. .gitignore
 
@@ -30,6 +34,81 @@
 
 - [웹사이트-gitignore.io](https://www.toptal.com/developers/gitignore)
 - [웹사이트-gitignore 저장소](https://github.com/github/gitignore)
+
+---
+
+
+
+## 2. clone, pull
+
+
+
+### (1) 원격 저장소 가져오기
+
+#### 1.  clone
+
+- 원격 저장소의 커밋 내역을 모두 가져와서, 로컬 저장소를 생성하는 명령어
+- "복제"라는 뜻으로, `git clone` 명령어를 통해 원격 저장소를 내 컴퓨터로 옮길 수 있습니다. 
+- `git clone <원격 저장소 주소>`의 형태로 작성합니다.
+- `git clone`= 폴더 만들고 -> `git init`-> `git remote` -> 데이터 가져오기
+- `git clone` 처음 한번만 실행! Github에서 저장소를 복제해서 내 컴퓨터에 똑같은 복제본을 만드는 역할
+
+
+
+#### 2. git pull
+
+- 원격 저장소의 변경 사항을 가져와서, 로컬 저장소를 업데이트하는 명령어
+- `git pull <저장소 이름> <브랜치 이름>`의 형태로 작성합니다. 
+- Ex) `git pull origin master` -> git 명령어를 사용할건데, origin이라는 원격 저장소의 master 브랜치의 내용을 가져온다(pull).
+- `git pull` git push처럼 로컬 저장소와 원격 저장소의 내용을 동기화하고 싶다면 언제든 사용!
+- 로컬저장소 --`git push`--> 원격저장소(Github)
+- 원격저장소(Github) --`git pull`--> 로컬저장소
+
+---
+
+
+
+- **내 컴퓨터에서 로컬 저장소 만들어져 있는 상황**
+
+`git push`
+
+내 컴퓨터 내용 변경
+
+`git add .`
+
+`git commit -m "~"`
+
+`git push -u origin master`
+
+ github 페이지 변경사항 확인!
+
+
+
+- **다른 내 컴퓨터로 변경사항 받아서 수정할 때(로컬 저장소 없음)**
+
+`git init` -> 로컬 저장소 만들어 주는 것
+
+`git clone`-> 원격 저장소를 로컬 저장소로 옮기기 위한 것 (연결 다리까지 만들어줌)
+
+다른 내 컴퓨터 내용 수정
+
+`git add .`
+
+`git commit -m "~"`
+
+`git push -u origin master`
+
+ github 페이지 변경사항 확인!
+
+
+
+- **다시 내 컴퓨터에서 변경사항 확인하고 수정할 때**
+
+`git pull` -> 원격저장소에 있는 수정사항 업로드 됨.
+
+내 컴퓨터 내용 수정 
+
+이후에는 위와 같음. 계속 반복
 
 
 
