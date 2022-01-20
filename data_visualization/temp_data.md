@@ -201,18 +201,18 @@
 
 
 
-- 마커 모양 바꾸기
+- 마커 모양 바꾸기	
 
--  ```python
-   import matplotlib.pyplot as plt
-   
-   plt.title('marker')
-   plt.plot([10,20,30,40],'r.',label='circle') # 'r.' -> 빨간색 원형 마커 그래프
-   plt.plot([40,30,20,10],'g^',label='triangle up') # 'g^' -> 초록색 삼각형 마커 그래프
-   plt.legend()
-   plt.show()
-   # plt.plot([],색상, 마커모양, 선모양, 범례)
-   ```
+  -  ```python
+     import matplotlib.pyplot as plt
+     
+     plt.title('marker')
+     plt.plot([10,20,30,40],'r.',label='circle') # 'r.' -> 빨간색 원형 마커 그래프
+     plt.plot([40,30,20,10],'g^',label='triangle up') # 'g^' -> 초록색 삼각형 마커 그래프
+     plt.legend()
+     plt.show()
+     # plt.plot([],색상, 마커모양, 선모양, 범례)
+     ```
 
 ### 4.  내 생일의 기온 변화 그래프 그리기
 
@@ -232,19 +232,19 @@
 
 - 데이터 리스트에 저장하기
 
-- ````python
-  import csv 
-  f =  open('seoul.csv')
-  data = csv.reader(f)
-  next(data)
-  result = [] # 리스트를 저장할 수 있는 리스트 변수
-  
-  for row in data:
-      if row[-1] != '': # 만약 최고 기온이 공백이 아니라면(공백 값이 아닌 데이터들만 리스트에 담은 것)
-          result.append(float(row[-1])) # 최고 기온을 실수로 변환하여 result 리스트 변수에 하나씩 추가해라
-  
-  print(result)
-  ````
+  - ````python
+    import csv 
+    f =  open('seoul.csv')
+    data = csv.reader(f)
+    next(data)
+    result = [] # 리스트를 저장할 수 있는 리스트 변수
+    
+    for row in data:
+        if row[-1] != '': # 만약 최고 기온이 공백이 아니라면(공백 값이 아닌 데이터들만 리스트에 담은 것)
+            result.append(float(row[-1])) # 최고 기온을 실수로 변환하여 result 리스트 변수에 하나씩 추가해라
+    
+    print(result)
+    ````
 
 
 
@@ -339,7 +339,7 @@
                 high.append(float(row[-1])) # 실수로 최고 기온 데이터를 high에 담아라
                 low.append(float(row[-2])) # 실수로 최저 기온 데이터를 low에 담아라
                 
-    plt.rcParams['axes.unicode_minus'] = False # 마이너스 기호 깨짐 방지(잘모르겠음)
+    plt.rcParams['axes.unicode_minus'] = False # 마이너스 기호 깨짐 방지
     plt.rc('font',family='AppleGothic') # mac은 AppleGothic 사용해야함. 그래야지 한글 출력 가능
     plt.title('내 생일의 기온 변화 그래프') 
     plt.plot(high, 'hotpink', label = 'high')
