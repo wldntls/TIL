@@ -138,5 +138,3 @@
   
   g_map.save('./gyonggi_population_'+year+'.html')
   ````
-
-- 
