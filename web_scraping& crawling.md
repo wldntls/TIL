@@ -302,7 +302,7 @@
     import requests
     from bs4 import BeautifulSoup
     
-    url = "https://search.daum.net/search?w=tot&q={0}%EB%85%84%EC%98%81%ED%99%94%EC%88%9C%EC%9C%84&DA=MOR&rtmaxcoll=MOR"
+    url = "https://search.daum.net/search?w=tot&q={0}%EB%85%84%EC%98%a81%ED%99%94%EC%88%9C%EC%9C%84&DA=MOR&rtmaxcoll=MOR"
     res = requests.get(url)
     res.raise_for_status()
     
@@ -325,6 +325,8 @@
           if idx >= 4: 
             break; # 상위 다섯개의 이미지를 다운로드 해야하기 때문에 인덱스가 4와 같거나 작으면 멈추게 설정함
     ````
+
+  
 
 - 이미지 다운로드(2016~2020 : 5개 씩)
 
@@ -355,3 +357,93 @@
     ````
 
     
+
+-  금융지주 사이트 텍스트만 리스트로 뽑아보기
+
+  - ````python
+    import requests
+    from bs4 import BeautifulSoup
+    
+    url = "http://www.cgs.or.kr/business/esg_tab04.jsp?pg=1&pp=10&skey=&svalue=&sfyear=2020&styear=2020&sgtype=TOTAL&sgrade=A%EF%BC%8B#ui_contents"
+    
+    res = requests.get(url)
+    res.raise_for_status()
+    
+    soup = BeautifulSoup(res.text,"html.parser")
+    tabel = soup.find("div",{"class","business_board"})
+    data =[] # 왜 있는거지?
+    
+    for row in tabel.findAll("tr"): # tr별로 row에 담기 
+        cols = row.findAll("td") # tr에서 td만 뽑아서 cols에 담기
+        cols = [ele.text.strip() for ele in cols] # 원소 별로 text로 텍스트만 뽑고, 공백이 있으면 삭제하고 출력
+        print(cols)
+    
+    # print(cols) 결과 값
+    []
+    ['14', 'BNK금융지주', '138930', 'A+', 'A', 'A+', 'A+', '2021', '-']
+    ['13', 'DGB금융지주', '139130', 'A+', 'A', 'A+', 'A+', '2021', '-']
+    ['12', 'JB금융지주', '175330', 'A+', 'A', 'A+', 'A+', '2021', '-']
+    ['11', 'KB금융', '105560', 'A+', 'A+', 'A+', 'A+', '2021', '-']
+    ['10', 'NAVER', '035420', 'A+', 'A', 'A', 'A+', '2021', '-']
+    ['9', 'S-Oil', '010950', 'A+', 'A', 'A+', 'A+', '2021', '-']
+    ['8', 'SK', '034730', 'A+', 'A+', 'A+', 'A+', '2021', '-']
+    ['7', 'SK이노베이션', '096770', 'A+', 'A', 'A+', 'A+', '2021', '-']
+    ['6', '기아', '000270', 'A+', 'A+', 'A+', 'A', '2021', '-']
+    ['5', '신한지주', '055550', 'A+', 'A+', 'A+', 'A+', '2021', '-']
+    ````
+
+
+
+- 네이버 웹툰 사이트
+
+  - ````python
+    import requests
+    from bs4 import BeautifulSoup
+    
+    url = "https://comic.naver.com/webtoon/weekday"
+    res = requests.get(url)
+    res.raise_for_status()
+    soup = BeautifulSoup(res.text,"html.parser")
+    
+    print(soup.title) # title 태그와 같이 출력
+    print(soup.title.get_text()) # title 태그 빼고 텍스트만 뽑기
+    print(soup.title.text) # title 태그 빼고 텍스트만 뽑기
+    print(soup.a) # 처음으로 a가 있는 속성값 불러옴
+    print(soup.a.attrs) #  key, value 값으로 뽑아
+    print(soup.a['href'])
+    
+    r1 = soup.find("li",attrs={"calss","rank01"})
+    print(r1.a.text) # li태그에 class 속성이 rank01인 속성 값에서 a 부분 텍스트만 출력
+    
+    r2 = r1.next_sibling.next_sibling # 다음값을 출력, 두번쓰는 이유 안보이는 공백이 있기 때문에 
+    print(r2.a.get_text())
+    
+    pr2 = r3.previous_sibling.previous_sibling # 이전값 출력
+    print(pr2.a.text)
+        
+    print(r1.parent) # r1의 부모, 상위 클래스를 포함한 하위 클래스가 모두 출력
+    
+    r3 = r1.find_next_sibling("li") # 다음 형제를 찾아서 출력
+    print(r3.a.text)
+    
+    r4 = r1.find_next_siblings("li") # 모든 형제들 다가져옴
+    print(r4)
+    
+    webtoon = soup.find("a", text="참교육-64화") # "a" 태그 중 text 내용과 동일한 a 태그를 가지고 와라
+    print(webtoon)
+    
+    # 네이버 웹툰 목록 전부 가져오기
+    webtoons = soup.find_all("a", attrs={"class":"title"}) # 리스트 반환
+    for webtoon in webtoons:
+        print(webtoon.text)
+    ````
+
+
+
+- 네이버 웹툰 스파이더맨 제목과 사이트 연결 출력해보기
+
+  - `````python
+    `````
+
+  - 
+
