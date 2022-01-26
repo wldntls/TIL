@@ -82,12 +82,12 @@
   - mac 
     - 터미널 실행 -> pip install urllib or conda install urllib
 
-- 네이버 첫 페이지 받아오기
+- 네이버 첫 페이지 받아오기(urlopen)
 
   - ````python
     from urllib.request import urlopen # requests 패키지랑 받아오는 코드가 다름 
     
-    url = "https://www.naver.com" # url 쓰고
+    url = "https://www.naver.com" # 링크 적고
     html = urlopen(url) # url open 해서 html에 담고 
     print(html.read()) # html 읽어서 프린트
     ````
@@ -174,7 +174,7 @@
 
 
 
-- hello만 뽑아내기
+- findText
 
   - ````python
     bs_obj = bs4.BeautifulSoup(html_str, "html.parser")
@@ -182,19 +182,9 @@
     li = ul.find("li") # ul에서 li 부분 담아서 li에 담기
     
     print(li) # 첫번째 li 부분만 출력
-    ````
-
-  
-
-- Hello 글자만 뽑아내기
-
-  - ````python
-    bs_obj = bs4.BeautifulSoup(html_str, "html.parser")
-    ul = bs_obj.find("ul")
-    li = ul.find("li")
-    
     print(li.text) # 첫번째 li 부분 텍스트만 출력
     ````
+  
 
 
 
@@ -254,7 +244,6 @@
     
     bs_obj = bs4.BeautifulSoup(html_str, "html.parser")
     ul = bs_obj.find("ul",{"class":"reply"}) # ul 부분에서 class의 속성 값이 reply인 값
-    
     print(ul)
     ````
 
@@ -296,7 +285,7 @@
 
   
 
-- 이미지 다운로드 하기(2021 5개)
+- 다음영화에서 2020 상위 5개의 이미지 다운로드 하기
 
   - ````python
     import requests
@@ -328,7 +317,7 @@
 
   
 
-- 이미지 다운로드(2016~2020 : 5개 씩)
+-  다음영화에서 2019 ~ 2015년까지 상위 5개의 이미지만 다운로드
 
   - ````python
     import requests
@@ -443,7 +432,46 @@
 - 네이버 웹툰 스파이더맨 제목과 사이트 연결 출력해보기
 
   - `````python
+    # 내가 쓴 코드
+    import requests
+    from bs4 import BeautifulSoup
+    
+    url = "https://comic.naver.com/webtoon/list?titleId=786537"
+    res = requests.get(url)
+    res.raise_for_status()
+    
+    soup = BeautifulSoup(res.text,"html.parser")
+    titles = soup.find_all("td",attrs= {"class":"title"})
+    
+    for title in titles: # titles를 하나씩 title 변수에 넣기
+        for url in titles: # titles를 하나씩 url 변수에 넣기 (주소값을 뽑기 위해)
+            webtoon_url = url.find("a") # 크롤링 부분에 a 찾기
+            urls = webtoon_url['href'] # a 부분에서 주소 href 부분의 주소 찾기
+            if urls.startswith("/"): # '/'로 시작한다면
+                urls = "https://comic.naver.com" + urls # 큰따옴표 부분과 추가하여 다시 urls에 담아라 
+        print(title.text,":",urls) # 첫번째 변수에 담은 것을 텍스트만 뽑기 그리고 urls을 출력하게 하면 제목과 사이트가 같이 출력됨
+    `````
+    
+  - `````python
+    # 강사님 코드
+    import requests
+    from bs4 import BeautifulSoup
+    
+    url = "https://comic.naver.com/webtoon/list?titleId=786537"
+    res = requests.get(url)
+    res.raise_for_status()
+    
+    soup = BeautifulSoup(res.text,"html.parser")
+    titles = soup.find_all("td",attrs= {"class":"title"})
+    
+    for title in titles:
+        print(title.a.text,"https://comic.naver.com" + title.a['href'])
+    
+    # 평점 텍스트만 
+    div = soup.find_all("div", attrs ={"class":"rating_type"})
+    
+    for star in div:
+        print(star.strong.text)
     `````
 
-  - 
-
+  
