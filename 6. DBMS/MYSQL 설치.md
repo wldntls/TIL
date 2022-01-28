@@ -1,4 +1,4 @@
-# 데이터베이스&SQL
+# 04.1 데이터베이스&SQL_MYSQL 설치
 
 
 
@@ -148,6 +148,7 @@
   - 설계
   - 개발
   - 시행
+  
 - 데이터베이스 모델링과 필수 용어
   - 데이터 베이스(DB) : 테이블이 저장되는 장소
   - DBMS : DataBase Management System의 약자. 데이터베이스를 관리하는 시스템 혹은 소프트웨어 (MYSQL)
@@ -160,14 +161,29 @@
   - SQL(Structured Query Language) : 구조화된 질의 언어, DBMS을 조작하는 언어
 
 - 데이터 베이스 생성
-  - Schema 창에서 오른쪽 클릭 
-  - Create schema 클릭 
-  - schema 명 정해주고 apply
-  - 생성한 스키마서 왼쪽 클릭 
-  - Create Table 클릭
-  - Table 명 입력 (memberTBL, productTBL)
-  - Colum name, Datatype 등을 정해주고 apply
-  - table에서 왼쪽 클릭 
-  - Select Rows - Limit 1000
-  - 데이터 입력하고 apply
+  
+  - 스키마 생성
+  
+    - Schema 창에서 오른쪽 클릭 
+    - Create schema 클릭 
+    - schema 명 정해주고 apply
+    - 생성한 스키마서 왼쪽 클릭 
+  
+  - 테이블 생성
+  
+    - Create Table 클릭
+    - Table 명 입력 (memberTBL, productTBL)
+    - Colum name, Datatype 등을 정해주고 apply
+    - table에서 왼쪽 클릭 
+    - Select Rows - Limit 1000
+    - 데이터 입력하고 apply
+  
+  - 테이블 데이터 생성 
+  
+    - Select Rows - Limit 1000 클릭
+    - 데이터 입력
+    - 삭제 : Delet Bow(s)
+  
+    
+  
 
