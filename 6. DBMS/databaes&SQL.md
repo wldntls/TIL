@@ -145,29 +145,30 @@
 
   - Between... and, in(), like()
 
-  - ````mysql
-    -- 키가 180 이상이고 183 이하의 이름과 키를 출력
-    select userName, height from usertbl where height >= 180 and height <= 183;
-    select userName, height from usertbl where height between 180 and 183;
-    
-    -- 주소가 경남, 전남, 경북인 회원의 이름 주소 출력
-    select userName, addr from usertbl where addr='경남' or addr ='전남' or addr = '경북';
-    select userName, addr from usertbl where addr in ('경남','전남','경북');
-    
-    -- 이름이 '김'씨인 사람의 이름과 키를 출력 
-    select userName, height from usertbl where userName like '김%';
-    
-    -- usertbl에서 앞에 한글자는 아무글자나오고 뒤에 '종신'인 사람의 이름과 키를 출력
-    select userName, height from usertbl where userName like '_종신';
-    
-    -- 두개 같이 쓰는 것도 가능
-    select userName, height from usertbl where userName like '_용%';
-    ````
+    - ````mysql
+      -- 키가 180 이상이고 183 이하의 이름과 키를 출력
+      select userName, height from usertbl where height >= 180 and height <= 183;
+      select userName, height from usertbl where height between 180 and 183;
+      
+      -- 주소가 경남, 전남, 경북인 회원의 이름 주소 출력
+      select userName, addr from usertbl where addr='경남' or addr ='전남' or addr = '경북';
+      select userName, addr from usertbl where addr in ('경남','전남','경북');
+      
+      -- 이름이 '김'씨인 사람의 이름과 키를 출력 
+      select userName, height from usertbl where userName like '김%';
+      
+      -- usertbl에서 앞에 한글자는 아무글자나오고 뒤에 '종신'인 사람의 이름과 키를 출력
+      select userName, height from usertbl where userName like '_종신';
+      
+      -- 두개 같이 쓰는 것도 가능
+      select userName, height from usertbl where userName like '_용%';
+      ````
 
   
 
-  - Any/all/some 그리고 서브쿼리
-
+  
+- Any/all/some 그리고 서브쿼리
+  
     - ````mysql
       -- 키가 177보다 큰사람의 이름과 키를 출력
       select userName, height from usertbl where height > 177;
@@ -190,68 +191,66 @@
       -- 지역이 '경남'인 사람의 키와 같은 사람만 출력
       select userName, height from usertbl
       where height in (select height from usertbl where addr = '경남'); -- =any는 in과 같음
-      ````
-
-      
-
-    - Order by 
-
-      - order by 절은 select, from, where, group by, having, order by 중 맨 뒤에 와야 한다.
-
-      - order by절은 mysql의 성능을 상당히 떨어뜨릴 소지가 있으므로, 꼭 필요한 경우에만 사용한다.
-
+    ````
+  
+    
+  
+  - Order by 
+  
+    - order by 절은 select, from, where, group by, having, order by 중 맨 뒤에 와야 한다.
+  
+    - order by절은 mysql의 성능을 상당히 떨어뜨릴 소지가 있으므로, 꼭 필요한 경우에만 사용한다.
+  
       - ````mysql
         -- mDate를 기준으로 내림차순으로 정렬 (기본 셋팅은 오름차순)
         select usrName, mDate from usertbl order by mDate desc; 
         
         -- height를 기준으로 내림차순, 다음으로 userName으로 오름차순
         slect userName, height from usertbl order by height desc, userName asc;
-        ````
-
-    - distint
-
+      ````
+  
+  - distint
+  
       - ````mysql
         -- 중복 제거
         select distinct addr from usertbl;
-        ````
-
-    - Limit 
-
+      ````
+  
+  - Limit 
+  
       - ````mysql
         -- 출력 갯수 제한
         select emp_no, hire_date from employees 
         order by hire_date asc
         limit 5; (limit 0,5 = limit 5 offset 0)
-        ````
-
-  - Create table~ select 구문 테이블 복사해서 사용
-
-    - 형식
-
+      ````
+  
+- Create table~ select 구문 테이블 복사해서 사용
+  
+  - 형식
+  
       - ```mysql
         select table 새로운테이블 (select 복사할열 from 기존테이블)
-        ```
-
-    - ````mysql
-      -- buytbl을 buytbl2로 복사
-      use sqldb;
-      create table buytbl2 (select * from buytbl);
-      select * from buytbl2;
-      
-      -- buytbl을 buytbl3로 복사
-      create table buytbl3 (select userID, prodName from buytbl);
-      select * from buytbl3; 
+      ```
+  
+      - ````mysql
+        -- buytbl을 buytbl2로 복사
+        use sqldb;
+        create table buytbl2 (select * from buytbl);
+        select * from buytbl2;
+        
+        -- buytbl을 buytbl3로 복사
+        create table buytbl3 (select userID, prodName from buytbl);
+        select * from buytbl3; 
       ````
-
-  - Group by  및 having 그리고 집계 함수
-
+  
+- Group by  및 having 그리고 집계 함수
+  
     - ````mysql
       use sqldb;
       select userID, sum(amount) from buytbl group by userID;
       
       select userID as '사용자 아이디', sum(price*amount) as '총 구매 개수'
       from buytbl group by userID;
-      ````
-
-    - 
+    ````
 
