@@ -165,9 +165,9 @@
       ````
 
   
-
   
-- Any/all/some 그리고 서브쿼리
+  
+  - Any/all/some 그리고 서브쿼리
   
     - ````mysql
       -- 키가 177보다 큰사람의 이름과 키를 출력
@@ -191,15 +191,13 @@
       -- 지역이 '경남'인 사람의 키와 같은 사람만 출력
       select userName, height from usertbl
       where height in (select height from usertbl where addr = '경남'); -- =any는 in과 같음
-    ````
+      ````
   
-    
+    - Order by 
   
-  - Order by 
+      - order by 절은 select, from, where, group by, having, order by 중 맨 뒤에 와야 한다.
   
-    - order by 절은 select, from, where, group by, having, order by 중 맨 뒤에 와야 한다.
-  
-    - order by절은 mysql의 성능을 상당히 떨어뜨릴 소지가 있으므로, 꼭 필요한 경우에만 사용한다.
+      - order by절은 mysql의 성능을 상당히 떨어뜨릴 소지가 있으므로, 꼭 필요한 경우에만 사용한다.
   
       - ````mysql
         -- mDate를 기준으로 내림차순으로 정렬 (기본 셋팅은 오름차순)
@@ -207,31 +205,31 @@
         
         -- height를 기준으로 내림차순, 다음으로 userName으로 오름차순
         slect userName, height from usertbl order by height desc, userName asc;
-      ````
-  
-  - distint
+        ````
+    
+    - distint
   
       - ````mysql
         -- 중복 제거
         select distinct addr from usertbl;
-      ````
-  
-  - Limit 
+        ````
+    
+    - Limit 
   
       - ````mysql
         -- 출력 갯수 제한
         select emp_no, hire_date from employees 
         order by hire_date asc
         limit 5; (limit 0,5 = limit 5 offset 0)
-      ````
+        ````
+    
+  - Create table~ select 구문 테이블 복사해서 사용
   
-- Create table~ select 구문 테이블 복사해서 사용
-  
-  - 형식
+    - 형식
   
       - ```mysql
         select table 새로운테이블 (select 복사할열 from 기존테이블)
-      ```
+        ```
   
       - ````mysql
         -- buytbl을 buytbl2로 복사
@@ -242,9 +240,9 @@
         -- buytbl을 buytbl3로 복사
         create table buytbl3 (select userID, prodName from buytbl);
         select * from buytbl3; 
-      ````
+        ````
   
-- Group by  및 having 그리고 집계 함수
+  - Group by  및 having 그리고 집계 함수
   
     - ````mysql
       use sqldb;
@@ -252,5 +250,5 @@
       
       select userID as '사용자 아이디', sum(price*amount) as '총 구매 개수'
       from buytbl group by userID;
-    ````
+      ````
 
