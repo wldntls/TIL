@@ -109,6 +109,8 @@
 
 ## 5. 지도 영역에 단계구분도 표시하기
 
+
+
 - ````python
   import pandas as pd
   import folium
