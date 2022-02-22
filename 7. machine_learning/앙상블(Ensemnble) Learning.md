@@ -40,10 +40,6 @@
 
   <img src="Desktop/스크린샷 2022-02-21 22.04.44.png" alt="스크린샷 2022-02-21 22.04.44" style="zoom: 33%;" />
 
-  - 서로 다른 알고리즘
-
-  - 하나의 데이터 셋
-
   - 유형
 
     - 하드보팅
@@ -334,8 +330,51 @@
 
 - 에이다 부스팅(Ada Boosting)
   - 약한 분류기들이 상호보완 하도록 순차적으로 학습하고, 이들을 조합하여 최종적으로 강한 분류기의 성능을 향상시키는 것
+  
+  
+  
 - 그래이던트 부스팅(Gradient Boosting)
-- 
+
+  ````python
+  from sklearn.ensemble import GradientBoostingClassifier
+  import time
+  import warnings
+  warnings.filterwarnings('ignore')
+  
+  X_train, X_test, y_train, y_test = get_human_dataset()
+  
+  start_time = time.time()
+  
+  gb_clf = GradientBoostingClassifier(random_state=0)
+  gb_clf.fit(X_train, y_train)
+  gb_pred = gb_clf.predict(X_test)
+  gb_accuracy = accuracy_score(y_test, gb_pred)
+  
+  print('GBM 정확도 : {0:.4f}'.format(gb_accuracy))
+  print('GBM 수행 시간 : {0:.1f} 초'.format(time.time()-start_time))
+  ````
+
+  ````python
+  from sklearn.model_selection import GridSearchCV
+  
+  params = {
+      'n_estimators': [100,500],
+      'learning_rate' : [0.05, 0.1]
+  }
+  
+  grid_cv = GridSearchCV(gb_clf, param_grid = params, cv=2, verbose=1)
+  grid_cv.fit(X_train, y_train)
+  print('최적 하이퍼 파라미터: /n', grid_cv.best_params_)
+  print('최고 예측 정확도:{0:.4f}'.format(grid_cv.best_score_))
+  ````
+
+  ````python
+  gb_pred = grid.best_estimator_.predict(X_test)
+  gb_accuracy = accuracy_score(y_test, gb_pred)
+  print('GBM 정확도 : {0:.4f}'.format(gb_accuracy))
+  ````
 
 
+
+## 7. SVM
 
