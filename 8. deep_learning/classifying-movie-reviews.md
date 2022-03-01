@@ -10,7 +10,7 @@
 
 이진 분류 - binary
 
-다중분류 
+다중분류 - 
 
 - categorical_crossentropy
   - 원핫 인코딩으로 된 것 써야함
@@ -117,10 +117,6 @@ word_index = imdb.get_word_index() # 인코딩된 인덱스를 가져올 수 있
 word_index
 ```
 
-````
-
-`
-
 ````python
 # key, value 값 위치 변경
 reverse_word_index = dict([(v,k) for k,v in word_index.items()])
@@ -149,7 +145,6 @@ decoded_review
 import numpy as np
 
 def vectorize_sequences(sequences, dimension=10000):
-    print(type(sequences),'1')
     results = np.zeros((len(sequences),dimension)) # 0으로 바꾸기
     for i, sequence in enumerate(sequences): # sequences를 for문을 돌리기
         results[i, sequence] = 1. # 리스트 값들을 모두 1.(실수)으로 바꾸기?
