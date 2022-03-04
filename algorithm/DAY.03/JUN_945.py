@@ -6,9 +6,9 @@ animations = {
 
 word = input()
 
-if word in animations:
-    print(animations[word])
-else:
-    print("I don't know")
+# if word in animations:
+#    print(animations[word])
+# else:
+#   print("I don't know")
 
 print(animations.get(word, "I don't know"))
