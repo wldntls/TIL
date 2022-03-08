@@ -1,0 +1,849 @@
+# 4-5. 딥러닝-실습(CNN)
+
+
+
+## 1.  데이터 불러오기
+
+````python
+import numpy as np 
+import pandas as pd 
+
+# 데이터 불러오기
+from tensorflow.keras.datasets import fashion_mnist, mnist
+
+(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+# shape 출력
+print("train dataset shape:", train_images.shape, train_labels.shape)
+print("test dataset shape:", test_images.shape, test_labels.shape)
+````
+
+````python
+# 결과
+# image size는 28x28의 grayscale 2차원 데이터
+train dataset shape: (60000, 28, 28) (60000,)
+test dataset shape: (10000, 28, 28) (10000,)
+````
+
+
+
+## 2. MINIST image array 시각화
+
+````python
+import matplotlib.pyplot as plt
+
+plt.imshow(train_images[0], cmap = 'gray')
+plt.title(train_labels[[0]])
+````
+
+`결과`
+
+(이미지 첨부하는 방법 알아보고 첨부하기)
+
+````python
+# 이미지 배열을 픽셀값으로 출력
+train_images[0, :, :], train_labels[0]
+````
+
+````python
+# 결과
+(array([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,
+           0,   0,  13,  73,   0,   0,   1,   4,   0,   0,   0,   0,   1,
+           1,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   3,
+           0,  36, 136, 127,  62,  54,   0,   0,   0,   1,   3,   4,   0,
+           0,   3],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   6,
+           0, 102, 204, 176, 134, 144, 123,  23,   0,   0,   0,   0,  12,
+          10,   0],
+          ...
+        [  0,   0,  74, 189, 212, 191, 175, 172, 175, 181, 185, 188, 189,
+         188, 193, 198, 204, 209, 210, 210, 211, 188, 188, 194, 192, 216,
+         170,   0],
+        [  2,   0,   0,   0,  66, 200, 222, 237, 239, 242, 246, 243, 244,
+         221, 220, 193, 191, 179, 182, 182, 181, 176, 166, 168,  99,  58,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,  40,  61,  44,  72,  41,  35,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0],
+        [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+           0,   0]], dtype=uint8), 9)
+````
+
+
+
+```python
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat','Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+```
+
+````python
+# 내코드
+for i in range(2): # 2행
+  for j in range(8): #8열
+    index = 8 * i + j # 인덱스 위치
+    plt.subplot(2, 8, index + 1) # 2행 8열을 만들고, 그래프를 인덱스 위치에 따라 삽입
+    plt.imshow(train_images[index], cmap = 'gray')
+    plt.title(class_names[train_labels[index]], fontsize = 8) # title은 class_names로 설정
+````
+
+````python
+# 강사님 코드
+def show_images(images, labels, ncols=8):
+  figure, axs = plt.subplots(figsize=(22,6), nrows=1, ncols=ncols) # 사이즈 설정, 1행 8열의 크기의 subplot 생성
+  for i in range(ncols): 
+    axs[i].imshow(images[i], cmap='gray') # 이미지를 하나씩 출력
+    axs[i].set_title(class_names[labels[i]]) # title은 class_names로 설정
+
+show_images(train_images[:8], train_labels[:8], ncols=8) # 1열 출력
+show_images(train_images[8:16], train_labels[8:16], ncols=8) # 2열 출력
+````
+
+
+
+## 3. 데이터 전처리 수행
+
+````python
+# 0 ~ 255 사이의 픽셀값을 0~1 사이 값으로 변환 -> 수행 속도를 위해 
+
+(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+def get_preprocessed_data(images, labels):
+    # 학습과 테스트 이미지 array를 0~1 사이값으로 scale 및 float32 형 변형. 
+    images = np.array(images/255.0, dtype=np.float32)
+    labels = np.array(labels, dtype=np.float32)
+    return images, labels
+
+train_images, train_labels = get_preprocessed_data(train_images, train_labels)
+test_images, test_labels = get_preprocessed_data(test_images, test_labels)
+
+print("train dataset shape:", train_images.shape, train_labels.shape)
+print("test dataset shape:", test_images.shape, test_labels.shape)
+````
+
+````python
+# 결과
+train dataset shape: (60000, 28, 28) (60000,)
+test dataset shape: (10000, 28, 28) (10000,)
+````
+
+
+
+````python
+train_images[0]
+````
+
+````python
+# 결과
+array([[0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        ],
+       [0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        ],
+       [0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        ],
+       [0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.00392157, 0.        , 0.        ,
+        0.05098039, 0.28627452, 0.        , 0.        , 0.00392157,
+        0.01568628, 0.        , 0.        , 0.        , 0.        ,
+        0.00392157, 0.00392157, 0.        ],
+...
+       [0.        , 0.        , 0.        , 0.        , 0.        ,
+       [0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        , 0.        , 0.        ,
+        0.        , 0.        , 0.        ]], dtype=float32)
+````
+
+````python
+test_labels[0]
+
+# 결과
+9.0
+````
+
+
+
+## 4. Dense Layer를 기반으로 모델을 생성
+
+````python
+INPUT_SIZE = 28
+
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Sequential
+
+# Sequential 모델 생성
+model = Sequential ([ 
+    Flatten(input_shape=(INPUT_SIZE, INPUT_SIZE)), # 이미지가 28x28, Flatten이라는 명령어를 쓰면 784로 펼쳐져서 들어감
+    Dense(100, activation='relu'),
+    Dense(30, activation='relu'),
+    Dense(10, activation='softmax') # 다중 분류이기 때문에 softmax 사용
+])
+
+model.summary()
+````
+
+````python
+# 결과
+# bios떄문에 한개씩 더 들어가서 param 조금씩 늘어나는 것임
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ flatten (Flatten)           (None, 784)               0         
+                                                                 
+ dense (Dense)               (None, 100)               78500     
+                                                                 
+ dense_1 (Dense)             (None, 30)                3030      
+                                                                 
+ dense_2 (Dense)             (None, 10)                310       
+                                                                 
+=================================================================
+Total params: 81,840
+Trainable params: 81,840
+Non-trainable params: 0
+_________________________________________________________________
+````
+
+
+
+## 5. 모델의 Loss와 Optimizer 설정하고 학습 수행
+
+````python
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.metrics import Accuracy
+
+model.compile(optimizer=Adam(0.001), loss = 'categorical_crossentropy', metrics=['accuracy'])
+````
+
+````python
+# 원-핫 인코딩 (to_categorical_ver)
+from tensorflow.keras.utils import to_categorical
+
+train_oh_labels = to_categorical(train_labels)
+test_oh_labels = to_categorical(test_labels)
+
+print(train_oh_labels.shape, test_oh_labels.shape)
+````
+
+````python
+# 결과
+(60000, 10) (10000, 10)
+````
+
+
+
+```python
+train_images.shape
+```
+
+```python
+# 결과
+(60000, 28, 28)
+```
+
+
+
+````python
+# 학습 수행
+history = model.fit(x=train_images, y=train_oh_labels, batch_size=32, epochs=20, verbose=1)
+# train_images -> (28x28), train_oh_labels -> 원-핫 인코딩 한 것
+# batch_size -> 데이터 32개만큼 끊어서 넣기
+# epochs -> 데이터를 20번 넣어서 성능이 어떤지 비교
+# verbose -> 0, 1, 혹은 2. 다변 모드. 0 = 자동, 1 = 진행 표시줄, 2 = 세대 당 한 라인
+````
+
+```python
+# 결과
+Epoch 1/20
+1875/1875 [==============================] - 7s 2ms/step - loss: 0.5210 - accuracy: 0.8154
+Epoch 2/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.3784 - accuracy: 0.8619
+Epoch 3/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.3418 - accuracy: 0.8738
+Epoch 4/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.3168 - accuracy: 0.8844
+Epoch 5/20
+1875/1875 [==============================] - 5s 2ms/step - loss: 0.2992 - accuracy: 0.8891
+Epoch 6/20
+1875/1875 [==============================] - 5s 2ms/step - loss: 0.2892 - accuracy: 0.8927
+Epoch 7/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2740 - accuracy: 0.8979
+Epoch 8/20
+1875/1875 [==============================] - 5s 2ms/step - loss: 0.2674 - accuracy: 0.9010
+Epoch 9/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2564 - accuracy: 0.9045
+Epoch 10/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2473 - accuracy: 0.9070
+Epoch 11/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2372 - accuracy: 0.9107
+Epoch 12/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2321 - accuracy: 0.9125
+Epoch 13/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2233 - accuracy: 0.9168
+Epoch 14/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2215 - accuracy: 0.9170
+Epoch 15/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2124 - accuracy: 0.9192
+Epoch 16/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2081 - accuracy: 0.9214
+Epoch 17/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.2030 - accuracy: 0.9229
+Epoch 18/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.1992 - accuracy: 0.9248
+Epoch 19/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.1934 - accuracy: 0.9258
+Epoch 20/20
+1875/1875 [==============================] - 4s 2ms/step - loss: 0.1881 - accuracy: 0.9286
+```
+
+
+
+````python
+history.history
+````
+
+````python
+# 결과
+{'accuracy': [0.8154333233833313,
+  0.8618999719619751,
+  0.8737666606903076,
+  0.8843500018119812,
+  0.8890666961669922,
+  0.8926666378974915,
+  0.8978666663169861,
+  0.900950014591217,
+  0.9045000076293945,
+  0.9069833159446716,
+  0.9107499718666077,
+  0.9125333428382874,
+  0.916783332824707,
+  0.9170166850090027,
+  0.9192166924476624,
+  0.9213500022888184,
+  0.9228500127792358,
+  0.9247666597366333,
+  0.9257833361625671,
+  0.9285500049591064],
+ 'loss': [0.5210114121437073,
+  0.3783905506134033,
+  0.341810405254364,
+  0.3168410658836365,
+...
+  0.20303457975387573,
+  0.1991790235042572,
+  0.193426713347435,
+  0.18805915117263794]}
+````
+
+
+
+````python
+# key값만 출력
+
+print(history.history['loss'])
+# 결과
+[0.5878934860229492, 0.40504732728004456, 0.36380714178085327, 0.34017515182495117, 0.31899550557136536, 0.3062683939933777, 0.29588350653648376, 0.28442075848579407, 0.27560365200042725, 0.2680952250957489, 0.25899451971054077, 0.2500629723072052, 0.245955228805542, 0.23699958622455597, 0.23554576933383942, 0.22701764106750488, 0.22002506256103516, 0.21870660781860352, 0.21304428577423096, 0.2079758495092392]
+
+print(history.history['accuracy'])
+# 결과
+[0.7981500029563904, 0.8567166924476624, 0.8701000213623047, 0.8775333166122437, 0.8852166533470154, 0.8885499835014343, 0.8916000127792358, 0.8953999876976013, 0.8985999822616577, 0.9018999934196472, 0.9041000008583069, 0.907966673374176, 0.9090666770935059, 0.9121999740600586, 0.9123499989509583, 0.9156166911125183, 0.9194166660308838, 0.9181166887283325, 0.9207500219345093, 0.9213500022888184]
+
+print(len(history.history['loss']))
+# 결과
+20
+````
+
+
+
+## 6. 테스트 데이터를 기반으로 Label 값 예측
+
+````python
+test_images.shape
+
+# 결과
+(10000, 28, 28)
+````
+
+````python
+# 예측
+pred_proba = model.predict(test_images)
+print(pred_proba.shape)
+
+# 결과
+(10000, 10)
+````
+
+
+
+````python
+# 0번째 이미지의 카테고리별 확률 출력
+pred_proba[0]
+
+# 결과
+array([2.5071262e-10, 1.2164634e-08, 1.3979772e-11, 8.1145868e-10,
+       6.9032189e-12, 1.2908934e-05, 1.2797938e-07, 2.6209131e-03,
+       2.0556048e-11, 9.9736601e-01], dtype=float32)
+````
+
+
+
+````python
+# predict할 때 2차원보다 3차원으로 넣어주는 것이 좋음
+# 넘파이의 expand_dims를 넣게 되면 3차원으로 바뀌게 됨
+np.expand_dims(test_images[0], axis=0).shape
+
+# 결과
+(1, 28, 28)
+````
+
+
+
+````python
+pred_proba = model.predict(np.expand_dims(test_images[0], axis=0))
+
+print('softmax output:', pred_proba)
+````
+
+````python
+# 결과
+softmax output: [[2.5071356e-10 1.2164657e-08 1.3979825e-11 8.1146018e-10 6.9032453e-12
+  1.2908934e-05 1.2797987e-07 2.6209094e-03 2.0556088e-11 9.9736601e-01]]
+````
+
+
+
+````python
+# squeeze -> 불필요한 차원을 없애주는 역할을 하는 함수(이 실습에서는 리스트에 리스트 씌워져있는 것을 없애줬음)
+# argmax(최댓값)을 가진 인덱스를 출력해줌 -> 확률이 가장 높은 함수를 출력하는 것임 (이 데이터의 경우에서는 9번째)
+pred = np.argmax(np.squeeze(pred_proba))
+print('predicted class value:', pred)
+````
+
+```python
+# 결과
+predicted class value: 9
+```
+
+
+
+````python
+print('target class value:', test_labels[0], 'predicted class value:', pred)
+````
+
+````python
+# 결과
+target class value: 9.0 predicted class value: 9
+````
+
+
+
+## 7. 테스트 데이터 세트로 모델 성능 검증
+
+````python
+# 평가
+model.evaluate(test_images, test_oh_labels, batch_size=64)
+````
+
+````python
+# 결과
+157/157 [==============================] - 0s 614us/step - loss: 0.3438 - accuracy: 0.8884
+[0.3438456356525421, 0.8884000182151794]
+````
+
+
+
+- 검증 데이터 세트를 이용하여 학습 수행
+
+````python
+import numpy as np
+import pandas as pd
+from tensorflow.keras.datasets import fashion_mnist
+
+(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+def get_preprocessed_data(images, labels):
+  images = np.array(images/255.0, dtype=np.float32) 
+  labels = np.array(labels, dtype=np.float32)
+  
+  return images, labels
+
+train_images, train_labels = get_preprocessed_data(train_images, train_labels)
+test_images, test_labels = get_preprocessed_data(test_images, test_labels)
+````
+
+
+
+````python
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.utils import to_categorical
+
+# 기존 학습 데이터를 다시 학습과 검증 데이터 세트로 분리
+tr_images, val_images, tr_labels, val_labels = train_test_split(train_images, train_labels, test_size = 0.15, random_state=2021)
+print('train과 validation shape:', tr_images.shape, tr_labels.shape, val_images.shape, val_labels.shape)
+````
+
+```python
+# 결과
+train과 validation shape: (51000, 28, 28) (51000,) (9000, 28, 28) (9000,)
+```
+
+
+
+````python
+# OHE 적용
+tr_oh_labels = to_categorical(tr_labels)
+val_oh_labels = to_categorical(val_labels)
+
+print('after OHE:', tr_oh_labels.shape, val_oh_labels.shape)
+````
+
+````python
+# 결과
+after OHE: (51000, 10) (9000, 10)
+````
+
+
+
+````python
+# 검증 데이터 세트를 적용하여 학습 수행. 
+
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
+
+INPUT_SIZE = 28
+model = Sequential([
+    Flatten(input_shape=(INPUT_SIZE, INPUT_SIZE)),
+    Dense(100, activation='relu'),
+    Dense(30, activation='relu'),
+    Dense(10, activation='softmax')
+])
+
+model.compile(optimizer=Adam(0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+````
+
+````python
+history = model.fit(x=train_images, y=train_oh_labels, batch_size=128, validation_data = (val_images,
+                                                  val_oh_labels), epochs=20, verbose=1)
+````
+
+````python
+# 결과
+Epoch 1/20
+469/469 [==============================] - 2s 4ms/step - loss: 0.5719 - accuracy: 0.8048 - val_loss: 0.4509 - val_accuracy: 0.8412
+Epoch 2/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.4070 - accuracy: 0.8563 - val_loss: 0.3823 - val_accuracy: 0.8666
+Epoch 3/20
+469/469 [==============================] - 2s 4ms/step - loss: 0.3628 - accuracy: 0.8715 - val_loss: 0.3529 - val_accuracy: 0.8729
+Epoch 4/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.3375 - accuracy: 0.8798 - val_loss: 0.3356 - val_accuracy: 0.8781
+Epoch 5/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.3198 - accuracy: 0.8853 - val_loss: 0.3063 - val_accuracy: 0.8876
+Epoch 6/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.3035 - accuracy: 0.8895 - val_loss: 0.3194 - val_accuracy: 0.8858
+Epoch 7/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2912 - accuracy: 0.8936 - val_loss: 0.2696 - val_accuracy: 0.9031
+Epoch 8/20
+469/469 [==============================] - 1s 3ms/step - loss: 0.2809 - accuracy: 0.8967 - val_loss: 0.2648 - val_accuracy: 0.9022
+Epoch 9/20
+469/469 [==============================] - 2s 4ms/step - loss: 0.2716 - accuracy: 0.9008 - val_loss: 0.2570 - val_accuracy: 0.9021
+Epoch 10/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2632 - accuracy: 0.9025 - val_loss: 0.2730 - val_accuracy: 0.8987
+Epoch 11/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2563 - accuracy: 0.9057 - val_loss: 0.2384 - val_accuracy: 0.9089
+Epoch 12/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2490 - accuracy: 0.9076 - val_loss: 0.2336 - val_accuracy: 0.9112
+Epoch 13/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2392 - accuracy: 0.9114 - val_loss: 0.2284 - val_accuracy: 0.9162
+Epoch 14/20
+469/469 [==============================] - 2s 4ms/step - loss: 0.2371 - accuracy: 0.9131 - val_loss: 0.2291 - val_accuracy: 0.9148
+Epoch 15/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2294 - accuracy: 0.9144 - val_loss: 0.2244 - val_accuracy: 0.9176
+Epoch 16/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2257 - accuracy: 0.9169 - val_loss: 0.2046 - val_accuracy: 0.9250
+Epoch 17/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2170 - accuracy: 0.9208 - val_loss: 0.2130 - val_accuracy: 0.9201
+Epoch 18/20
+469/469 [==============================] - 2s 4ms/step - loss: 0.2132 - accuracy: 0.9207 - val_loss: 0.2063 - val_accuracy: 0.9222
+Epoch 19/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2068 - accuracy: 0.9234 - val_loss: 0.2080 - val_accuracy: 0.9218
+Epoch 20/20
+469/469 [==============================] - 2s 3ms/step - loss: 0.2057 - accuracy: 0.9240 - val_loss: 0.1955 - val_accuracy: 0.9272
+````
+
+
+
+````python
+history.history
+````
+
+````python
+# 결과
+{'accuracy': [0.8047666549682617,
+  0.8562999963760376,
+  0.8715000152587891,
+  0.8797666430473328,
+  0.885283350944519,
+  0.8895166516304016,
+  0.893583357334137,
+  0.8966833353042603,
+  0.900783360004425,
+  0.9024500250816345,
+  0.9056500196456909,
+  0.9075666666030884,
+  0.911383330821991,
+  0.9130833148956299,
+  0.9143833518028259,
+  0.916866660118103,
+  0.9207833409309387,
+  0.9206666946411133,
+  0.9233666658401489,
+  0.9239833354949951],
+ 'loss': [0.5718967914581299,
+  0.40701791644096375,
+  0.36284616589546204,
+  0.33745160698890686,
+  0.3197872042655945,
+  0.3034569025039673,
+  0.2911584973335266,
+  0.28094685077667236,
+  0.27156275510787964,
+  0.2631573975086212,
+  0.2563372850418091,
+  0.24896641075611115,
+  0.23915326595306396,
+  0.23705317080020905,
+  0.2293567806482315,
+  0.2257358431816101,
+  0.2169700711965561,
+  0.21320532262325287,
+  0.206792950630188,
+  0.20566484332084656],
+ 'val_accuracy': [0.8412222266197205,
+  0.8665555715560913,
+  0.8728888630867004,
+  0.8781111240386963,
+  0.8875555396080017,
+  0.8857777714729309,
+  0.9031111001968384,
+  0.902222216129303,
+  0.9021111130714417,
+  0.8986666798591614,
+  0.9088888764381409,
+  0.9112222194671631,
+  0.9162222146987915,
+  0.9147777557373047,
+  0.917555570602417,
+  0.925000011920929,
+  0.9201111197471619,
+  0.9222221970558167,
+  0.9217777848243713,
+  0.9272222518920898],
+ 'val_loss': [0.45087534189224243,
+  0.382306843996048,
+  0.35293442010879517,
+...
+  0.20626477897167206,
+  0.20796939730644226,
+  0.19554689526557922]}
+````
+
+
+
+````python
+print(history.history['loss'])
+````
+
+````python
+[0.5718967914581299, 0.40701791644096375, 0.36284616589546204, 0.33745160698890686, 0.3197872042655945, 0.3034569025039673, 0.2911584973335266, 0.28094685077667236, 0.27156275510787964, 0.2631573975086212, 0.2563372850418091, 0.24896641075611115, 0.23915326595306396, 0.23705317080020905, 0.2293567806482315, 0.2257358431816101, 0.2169700711965561, 0.21320532262325287, 0.206792950630188, 0.20566484332084656]
+````
+
+
+
+````python
+print(history.history['accuracy'])
+````
+
+````python
+[0.8047666549682617, 0.8562999963760376, 0.8715000152587891, 0.8797666430473328, 0.885283350944519, 0.8895166516304016, 0.893583357334137, 0.8966833353042603, 0.900783360004425, 0.9024500250816345, 0.9056500196456909, 0.9075666666030884, 0.911383330821991, 0.9130833148956299, 0.9143833518028259, 0.916866660118103, 0.9207833409309387, 0.9206666946411133, 0.9233666658401489, 0.9239833354949951]
+````
+
+
+
+````python
+print(history.history['val_loss'])
+````
+
+````python
+[0.45087534189224243, 0.382306843996048, 0.35293442010879517, 0.335615873336792, 0.3062935769557953, 0.31938454508781433, 0.26961812376976013, 0.26478153467178345, 0.2570379376411438, 0.27298882603645325, 0.23835761845111847, 0.23357462882995605, 0.2283569574356079, 0.22909337282180786, 0.22436340153217316, 0.20456460118293762, 0.21303041279315948, 0.20626477897167206, 0.20796939730644226, 0.19554689526557922]
+````
+
+
+
+````python
+print(history.history['val_accuracy'])
+````
+
+````python
+[0.8412222266197205, 0.8665555715560913, 0.8728888630867004, 0.8781111240386963, 0.8875555396080017, 0.8857777714729309, 0.9031111001968384, 0.902222216129303, 0.9021111130714417, 0.8986666798591614, 0.9088888764381409, 0.9112222194671631, 0.9162222146987915, 0.9147777557373047, 0.917555570602417, 0.925000011920929, 0.9201111197471619, 0.9222221970558167, 0.9217777848243713, 0.9272222518920898]
+````
+
+
+
+````python
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['accuracy'], label='train')
+plt.plot(history.history['val_accuracy'], label='valid')
+plt.legend()
+````
+
+````python
+plt.plot(history.history['loss'], label='train')
+plt.plot(history.history['val_loss'], label='valid')
+plt.legend()
+````
+
+
+
+## 8. Fiuntional API
+
+````python
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Sequential
+
+INPUT_SIZE = 28
+
+model = Sequential ([
+    Flatten(input_shape=(INPUT_SIZE, INPUT_SIZE)), # 이미지가 28x28, Flatten이라는 명령어를 쓰면 784로 펼쳐져서 들어감
+    Dense(100, activation='relu'),
+   	Dense(30, activation='relu'),
+    Dense(10, activation='softmax')
+])
+
+model.summary()
+````
+
+````python
+# 결과
+Model: "sequential_2"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ flatten_2 (Flatten)         (None, 784)               0         
+                                                                 
+ dense_6 (Dense)             (None, 100)               78500     
+                                                                 
+ dense_7 (Dense)             (None, 30)                3030      
+                                                                 
+ dense_8 (Dense)             (None, 10)                310       
+                                                                 
+=================================================================
+Total params: 81,840
+Trainable params: 81,840
+Non-trainable params: 0
+_________________________________________________________________
+````
+
+
+
+````python
+model1 = Sequential()
+model1.add(Flatten(input_shape=(INPUT_SIZE, INPUT_SIZE)))
+model1.add(Dense(100, activation='relu'))
+model1.add(Dense(30, activation='relu'))
+model1.add(Dense(10, activation='softmax'))
+
+model.summary()
+````
+
+````python
+# 결과
+Model: "sequential_12"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ flatten_15 (Flatten)        (None, 784)               0         
+                                                                 
+ dense_45 (Dense)            (None, 100)               78500     
+                                                                 
+ dense_46 (Dense)            (None, 30)                3030      
+                                                                 
+ dense_47 (Dense)            (None, 10)                310       
+                                                                 
+=================================================================
+Total params: 81,840
+Trainable params: 81,840
+Non-trainable params: 0
+_________________________________________________________________
+````
+
+
+
+````python
+from tensorflow.keras.layers import Input, Dense, Flatten
+from tensorflow.keras.models import Model
+
+input_tensor = Input(shape=(INPUT_SIZE, INPUT_SIZE))
+x = Flatten()(input_tensor)
+x = Dense(100, activation='relu')(x)
+x = Dense(100, activation='relu')(x)
+output = Dense(100, activation='softmax')(x)
+
+model = Model(inputs=input_tensor, outputs=output)
+
+model.summary()
+````
+
+````python
+Model: "model_3"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_4 (InputLayer)        [(None, 28, 28)]          0         
+                                                                 
+ flatten_17 (Flatten)        (None, 784)               0         
+                                                                 
+ dense_51 (Dense)            (None, 100)               78500     
+                                                                 
+ dense_52 (Dense)            (None, 100)               10100     
+                                                                 
+ dense_53 (Dense)            (None, 100)               10100     
+                                                                 
+=================================================================
+Total params: 98,700
+Trainable params: 98,700
+Non-trainable params: 0
+_________________________________________________________________
+````
+
+
+
