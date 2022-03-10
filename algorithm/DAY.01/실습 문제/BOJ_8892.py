@@ -24,6 +24,9 @@ for i in range(T):
 # - password1, password2에 각각 앞뒤로 문자열을 더하여 할당
 # - 만약 password1, password2가 문자열을 뒤집었을 때와 같다면 각각을 password에 할당
 # - 마지막으로 password를 for문 밖에서 출력
+
+# 피드백
+# - 대문자 바꾸기
 ############################
 
 

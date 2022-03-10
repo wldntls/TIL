@@ -1,9 +1,12 @@
 N = int(input())
+line = list(input())
 
-file_list = [input() for i in range(N)]
+for i in range(N-1):
+    other = input()
+    print(other)
+    for j in range(len(line)):
+        if line[j] != other[j]:
+            line[j] ='?'
+print(''.join(line))
 
-for file in file_list:
-    for i in file:
-        if file_list[i] != file_list[i+1]:
-            print(file_list)
 
