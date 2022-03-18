@@ -4,7 +4,7 @@ for i in range(5):
     for j in range(4):
         if wood_pieces[j] > wood_pieces[j+1]:
             wood_pieces[j], wood_pieces[j+1] = wood_pieces[j+1], wood_pieces[j]
-            print(*wood_pieces)
+            print(*wood_pieces) # 출력을 위해 리스트 풀어주기
 
         if wood_pieces == [1,2,3,4,5]:
             break

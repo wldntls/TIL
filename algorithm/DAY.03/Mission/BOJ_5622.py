@@ -16,5 +16,5 @@ for key, value in dial.items(): # items를 활용하여 key값과 value값을 �
         if i in key: # 만약에 i가 key값에 있다면
             min_time += value # min_time에 value값을 더해줌
 print(min_time) # 최종값을 출력
- 
+
 
