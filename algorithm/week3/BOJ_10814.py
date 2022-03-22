@@ -6,7 +6,6 @@ for i in range(n):
     age, name = map(str, input().split())
     age = int(age)
     members.append((age, name))
-    #member_sorted = sorted(members)
 
 members.sort(key=lambda x : x[0])
 
