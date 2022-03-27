@@ -19,11 +19,11 @@ for i in range(h):
             a_matrix[i][j] += 1
         if i+x < h and j+y < w:
             a_matrix[i+x][j+y] += 1
+print(a_matrix)
 
 # 겹치는 구간을 원래 배열 A로 돌려주기
 
 
-print(a_matrix)
             
 
 
