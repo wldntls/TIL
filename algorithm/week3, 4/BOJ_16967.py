@@ -6,8 +6,6 @@ merge_matrix=[list(map(int, input().split())) for _ in range(h+x)]
 a_matrix = [[0 for _ in range(w)] for _ in range(h)]
 check = [[0 for _ in range(w)] for _ in range(h)]
 
-print(a_matrix)
-
 for i in range(h):
     for j in range(w):
         # 배열 A와 배열 B가 겹치는 구간 찾기
@@ -28,11 +26,3 @@ for i in range(h):
     for j in range(w):
         print(a_matrix[i][j], end=' ')
     print()
-
-            
-
-
-
-# 원래 배열인 A를 추출해내야함
-
-
