@@ -11,7 +11,7 @@ for i in range(n): # n만큼 for문 돌리기
     pay_list.append(pay) # pay_list에 금액 넣기
     dp.append(pay) # dp 리스트에 금액 넣기
     print(dp)
-dp.append(0) # dp[i] = dp[i+1] 밑에 이부분에서 list of range 오류를 방지하기 위해 0을 추가
+dp.append(0) # dp[i] = dp[i+1] 밑에 이부분에서 list of range 오류를 방지하기 위해 0을 추가, 뒤에서부터 값을 돌리기 위함도 있음
 #print(t_list)
 #print(p_list)
 print(dp) # 출력 결과 [10, 20, 10, 20, 15, 40, 200, 0]
@@ -31,12 +31,11 @@ for i in range(n-1, -1, -1): # 뒤에서 부터 for문 돌리기
         print(day_list[i],'ㅓㅈ에') # day_list의 인덱스를 반환
         print(dp[i+day_list[i]],'wad') # 인덱스 값과 dp의 i 인덱스 값을 더하고 그 인덱스에 담겨져 있는 값 출력 
         print(pay_list[i]+dp[i+day_list[i]],'ws')
-        dp[i] = max(dp[i+1], pay_list[i]+dp[i+day_list[i]]) # 
+        # dp[i+1] : 일을 맡지 않을 경우 보상
+        # pay_list[i]+dp[i+day_list[i]] : 현재 일을 맡았을 때 들어오는 보상 + 현재 일을 끝낸 다음날에 쌓여있는 보상
+        dp[i] = max(dp[i+1], pay_list[i]+dp[i+day_list[i]]) 
 
 print(dp[0])
-
-
-
 
 '''
 
