@@ -1,15 +1,15 @@
 n = int(input()) # 3의 거듭제곱 
 
-def get_stars(n):
-    temp = []
-    for i in range(len(n) * 3):
-        #print(i)
-        #print(i % len(n), 'fgkfk')
-        if i // len(n) == 1:
+def get_stars(n): # 여기서 n은 아래 star 리스트
+    temp = [] 
+    for i in range(len(n) * 3): # 리스트의 길이 * 3만큼 반복
+        print(i)
+        print(i % len(n), 'fgkfk')
+        if i // len(n) == 1: # 리스트의 길이로 나눈 몫이 1일 경우(즉, '* *'일 경우)
             temp.append(n[i % len(n)] + " " * len(n) + n[i % len(n)])
         else:
             temp.append(n[i % len(n)] * 3)
-        #print(temp)
+        print(temp)
     return temp
 
 star = ["***", "* *", "***"]
@@ -23,7 +23,7 @@ while n != 3:
 
 for _ in range(count):
     star = get_stars(star)
-    print(star)
+    #print(star)
 
 for j in star:
    print(j)
@@ -44,4 +44,4 @@ print(3%15) # 결과 3
 '''
 
 # https://ji-gwang.tistory.com/225
-
+# 

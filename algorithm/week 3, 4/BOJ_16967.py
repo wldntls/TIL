@@ -29,3 +29,6 @@ for i in range(h):
         print(a_matrix[i][j], end=' ')
     print()
 
+
+# 피드백
+# 합칠수도 있을 것 같음
