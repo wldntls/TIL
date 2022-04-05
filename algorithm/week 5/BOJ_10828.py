@@ -13,7 +13,7 @@ for _ in range(n):
         if len(stack) == 0:
             print(-1)
         elif len(stack) > 0:
-            print(stack.pop())
+            print(stack.pop()) # 가장 위에 있는 수를 빼고, 그 수를 출력
 
     if command[0] == 'size':
         print(len(stack))
@@ -28,7 +28,7 @@ for _ in range(n):
         if len(stack) == 0:
             print(-1)
         elif len(stack) > 0:
-            print(stack[-1])
+            print(stack[-1]) # 그냥 가장 위에 있는 수를 출력해주는 것(빼는 것 아님)
 
 
 # 문자열 받을때 - sys.stdin.readline()
