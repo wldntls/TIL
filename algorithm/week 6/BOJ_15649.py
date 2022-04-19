@@ -7,7 +7,7 @@ def solve(depth, n, m):
     if depth == m:
         print(' '.join(map(str, arr)))
         return
-    for i in range(1, len(visited) + 1):
+    for i in range(1, n + 1):
         if not visited[i]:
             # 탐색을 안했다면 if not ___ => False 일 경우, if ___ => True 일 경우
             # 따라서 visted[i] 가 False이라면 조건문을 수행한다.
@@ -24,6 +24,22 @@ def solve(depth, n, m):
             #print(arr, '탐사 내용 제거')
 
 solve(0, n, m)
+
+
+""" def dfs():
+    if len(s) == M:
+        print(' '.join(map(str,s)))
+        return
+    for i in range(1, N+1):
+        if i in s: # 가지치기, 이미 선택한 숫자 배제
+            continue
+        s.append(i)
+        dfs() #함수호출
+        s.pop() # 출력 후 return하고 마지막 원소 비우기
+
+N, M = map(int, input().split())
+s = []
+dfs() """
 
 ###############################
 # 내가 이해한 것

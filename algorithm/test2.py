@@ -23,4 +23,21 @@ for i in ewsn:
             direction = 'right'
 
 
+n, m = map(int, input().split())
 
+visited = [False] * (n + 1)
+arr = [] 
+
+def back_tracking(depth, n, m):
+    if depth == m:
+        print(' '.join(map(str, arr)))
+        return
+    for i in range(1, len(visited) + 1):
+        if not visited[i]:
+            visited[i] = True 
+            arr.append(i) 
+            back_tracking(depth + 1, n, m) 
+            visited[i] = False
+            arr.pop()
+
+back_tracking(0, n, m)

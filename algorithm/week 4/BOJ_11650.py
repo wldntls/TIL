@@ -16,7 +16,7 @@ for element_location in element_locations:
 """
 n = int(input())
 
-cdn = [ list(map(int,input().split())) for i in range(n)]
+cdn = [list(map(int,input().split())) for i in range(n)]
 
 cdn.sort()
 
