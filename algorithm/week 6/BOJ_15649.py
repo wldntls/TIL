@@ -1,6 +1,7 @@
 n, m = map(int, input().split())
 
-visited = [False] * (n + 1) # +1을 해주는 이유 -> 헷갈리지 않게 하기 위해 1부터 시작하는 것으로 맞춰주기 위해 
+visited = [False] * (n + 1) # 탐색 여부를 확인하기 위한 리스트
+# +1을 해주는 이유 -> 헷갈리지 않게 하기 위해 1부터 시작하는 것으로 맞춰주기 위해 
 arr = [] # 결과를 담아서 출력해주기 위한 리스트 선언
 
 def solve(depth, n, m):
@@ -25,6 +26,7 @@ def solve(depth, n, m):
 
 solve(0, n, m)
 
+# https://blog.encrypted.gg/945
 
 """ def dfs():
     if len(s) == M:

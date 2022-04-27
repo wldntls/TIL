@@ -9,27 +9,26 @@
 # 규칙
 # 해당 위치의 대각선 위 위치의 숫자들이 합
 
-
 n = int(input())
 
-stairs = [[0]*10 for _ in range(n + 1)]
+stairs = [[0]*10 for _ in range(n + 1)] # 이차원 리스트 생성
 
 # 초기값 설정
-stairs[1] = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+stairs[1] = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1] # 자리수가 1일 때, 올 수 있는 숫자들의 갯수? 
 
 for i in range(2, n + 1):
 
-    # 계단 수가 0으로 끝나는 경우
+    # 계단 수가 0으로 끝나는 경우 -> 앞에 있는 자리수가 1일 때만 고려해야함
     stairs[i][0] = stairs[i - 1][1]
     #print(stairs[i][0], 'a')
     #print(stairs[i - 1][1],'b')
 
-    # 계단 수가 9로 끝나는 경우
+    # 계단 수가 9로 끝나는 경우 -> 앞에 있는 자리수가 8일 떄만 고려해야함
     stairs[i][9] = stairs[i - 1][8]
     #print(stairs[i][9], 'c')
     #print(stairs[i - 1][8], 'd')
 
-    # 계단 수가 1~8로 끝나는 경우 
+    # 계단 수가 1~8로 끝나는 경우 -> 앞뒤로 올 수 있는 자리수의 갯수를? 더해줘야하기 때문에 
     for j in range(1, 9):
         stairs[i][j] = stairs[i - 1][j - 1] + stairs[i - 1][j + 1]
         # print(stairs[i - 1][j - 1], 'e')
@@ -41,3 +40,4 @@ print(sum(stairs[n]) % 1000000000)
 # 아직 해결되지 않은 점 
 # tairs[i - 1][8] 등에서 왜 모두 i-1이지?
 # 출력은 왜 저렇게 뽑지? 문제에서 저렇게 뽑으라함
+# https://velog.io/@ready2start/Python-%EB%B0%B1%EC%A4%80-10844-%EC%89%AC%EC%9A%B4-%EA%B3%84%EB%8B%A8-%EC%88%98
