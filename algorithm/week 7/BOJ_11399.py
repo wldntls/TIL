@@ -7,7 +7,7 @@ n = int(input())
 p = sorted(list(map(int, input().split())))
 
 # 결과
-# [1, 2, 3, 3, 4]
+# p = [1, 2, 3, 3, 4]
 
 min_time = 0
 sum = 0
@@ -16,7 +16,7 @@ for i in p:
     sum += i
     min_time += sum
     
-    print(min_time)
+print(min_time)
 
 
 
