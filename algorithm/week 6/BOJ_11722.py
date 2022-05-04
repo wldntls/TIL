@@ -5,8 +5,6 @@
 
 # 점점 감소하는 수열의 길이를 구하는 것
 
-
-
 n = int(input())
 a = list(map(int, input().split()))
 
