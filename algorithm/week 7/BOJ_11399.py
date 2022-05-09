@@ -13,8 +13,8 @@ min_time = 0
 sum = 0
 
 for i in p:
-    sum += i
-    min_time += sum
+    sum += i # sum에는 그사람이 돈을 인출하는데 걸리는 시간
+    min_time += sum # min_time은 모든 사람이 돈을 인출하는데 필요한 최소시간
     
 print(min_time)
 
