@@ -1,7 +1,7 @@
 t = int(input())
 
 n = [int(input()) for i in range(t)]
-print(n)
+
 p = [0] * 101
 
 p[1] = 1
