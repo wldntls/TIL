@@ -8,21 +8,7 @@ tag = False
 word = ""
 result = ""
 
-# <>가 있으면 그대로 출력
-for i in s:
-    if tag == False:
-        if i == '<':
 
-
-
-
-# <> 밖에 있는 것 뒤집기
-
-
-s=list(input())
-tag=False
-word=''
-result=''
 for i in s:
   #뒤집어서 출력
   if tag==False:
@@ -46,3 +32,8 @@ for i in s:
       word=''
 
 print(result+word)
+
+
+
+# <> 밖에 있는 것 뒤집기
+
