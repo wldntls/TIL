@@ -8,32 +8,32 @@ tag = False
 word = ""
 result = ""
 
+# 예시 : <ab cd>ef gh<ij kl>
 
 for i in s:
   #뒤집어서 출력
-  if tag==False:
-    if i=='<':
+  if tag==False: 
+    # print(i)
+    if i=='<': # 1. <로 시작하면 tag가 true로 바뀌면서 word에 추가
+      # print(i)
       tag=True
-      word=word+i
+      word += i
+      
     #중간점검
-    elif i==' ':
-      word=word+i
-      result=result+word
-      word=''
-    else:
-      word=i+word
+    elif i==' ': # 만약 중간에 공백이 있다면 
+      word += i # 공백을 word에 넣고 
+      result += word # 공백을 result에 넣고
+      word='' # word 초기화
+    else: # 그냥 문자열이면 
+      word=i+word # 뒤집어서 문자열 넣기
 
   #정상적으로 출력
-  elif tag==True:
-    word=word+i
-    if i=='>':
+  elif tag==True: # 2. ab는 >가 나타나기 전이기 때문에 tag가 true로 고정되어 있기 때문에 정상으로 word에 들어감
+    word += i
+    
+    if i=='>': # 3. 만약 i가 > 이면 여기로 들어와서 tag를 false로 바뀌고 
       tag=False
-      result=result+word
-      word=''
+      result += word # 4. 정상적으로 출력됐던, word를 result에 넣음
+      word='' # 5. 그리고 word 초기화 
 
-print(result+word)
-
-
-
-# <> 밖에 있는 것 뒤집기
-
+print(result+word) # 끝에 문자열이 오면 갱신이 안되니까 맨뒤에 있는 뒤집어져있는 문자열과 같이 출력
