@@ -1,11 +1,9 @@
 # 모든 경우의 수를 다 계산해봐야함
+# '-' 뒤에 괄호를 치고 계산을 하면 최소값을 뽑을 수 있음
 
-import sys
-
-intput = lambda: sys.stdin.readline().rstrip()
 exp = input().split('-')
 
-num = []
+num = []  
 
 for i in exp:
     if '+' in i:

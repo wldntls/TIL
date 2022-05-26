@@ -37,7 +37,7 @@
 n = int(input()) # 전체 사람의 수를 입력받기 
 a, b = map(int, input().split()) # 촌수를 계산해야하는 두사람
 m = int(input()) # 부모 자식간의 관계의 개수
-graph = [[] for _ in range(n+1)] # 연결된 노드들을 받을 인덱스 생성
+graph = [[] for _ in range(n+1)] # 연결된 노드들을 받을 이중리스트 생성
 visited = [False] * (n+1) # 방문을 표시할 리스트 
 result = [] # 결과를 담을 리스트
 
@@ -48,10 +48,12 @@ for _ in range(m):
     graph[y].append(x)
 
 # print(graph)
-# 결과 : [[], [2, 3](3), [1, 7, 8, 9](2), [1], [5, 6], [4], [4], [2](1), [2], [2]]
+# 결과 : [[], [2, 3](3), [1, 7, 8, 9](2)(4), [1], [5, 6], [4], [4], [2](1), [2], [2]]
 # 인덱스 위치에 연결되어 있는 숫자의 리스트가 들어가 있음 
 
-def dfs(a_num, depth): # a와 깊이를 계산할 depth를 인자로 받기
+# a_num -> node 변수값 
+# 연결해주는 것들을 엣지라고 부름
+def dfs(a_num, depth): # a와 깊이를 계산할 depth를 인자로 받기 
     depth += 1 # 깊이 +1 해주기
     visited[a_num] = True # 방문처리
     
