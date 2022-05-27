@@ -2,8 +2,6 @@
 # 학생들이 배팅할 마일리지의 최댓값은 100
 # 가장 많은 과목수를 골라야 한다. 즉 내가 가진 포인트를 최대한 활용해서 많은 강의를 듣는것이 목적인 문제이다. 
 
-
-
 n,m=map(int,input().split()) # 과목수 n, 주어진 마일리지 m
 result=[]
 
@@ -17,7 +15,7 @@ for k in range(n):
   else:
     result.append(mileage[l-1]) # 수강신청 인원 마지막 사람의 마일리지를 저장
 result.sort() # 결과를 오름차순으로 정렬
-print(result)
+# print(result)
 
 cnt=0
 for i in result: 
@@ -27,5 +25,5 @@ for i in result:
     print(cnt-1) # 과목수를 하나빼서 출력
     break
 
-if m>0: 
+if m>0: # 이건 왜하는거지..? 모든 과목수를 다 들었는대도 m이 남으면 그때는 cnt 출력!
   print(cnt)
