@@ -38,6 +38,7 @@ for action in lst:
 
 
 
+
         # ny = dx[direction]
 
         # print(action, 'move')
@@ -48,3 +49,5 @@ if x < 0 or y < 0 or x > m or y > m:
     print(-1)
 else:
     print(x, y) 
+
+# 디버깅 -> 

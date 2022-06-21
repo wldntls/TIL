@@ -44,6 +44,7 @@ for i in answer:
     print(*i)
     
 
+# pop이나 append를 쓰는 것이 디큐가 더 시간 복잡도 적음
 
 # for i in range(num_count):
 #     for j in range(1, 4):
