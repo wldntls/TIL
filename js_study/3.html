@@ -2,41 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script>
-        function nightDayHandler(self){
-            var target = document.querySelector('body');
-            if (self.value === 'night'){
-                target.style.backgroundColor = 'black';
-                target.style.color = 'white';
-                self.value = 'day';
+    var Links = {
+        setColor:function (color) {
+            var alist = document.querySelectorAll('a');
+            var i = 0;
+            while (i < alist.length) {
+                alist[i].style.color = color;
+                i += 1;
+            }
+        }   
+    }
+    var Body = {
+        SetColor:function (color){
+            document.querySelector('body').style.color = color;
+        },
+        SetBackgroundColor:function (color){
+            document.querySelector('body').style.backgroundColor = color;
+        }
+    }
+    function nightDayHandler(self){
+        var target = document.querySelector('body');
+        if (self.value === 'night'){
+            Body.SetBackgroundColor('black');
+            Body.SetColor('white');
+            self.value = 'day';
+            Links.setColor('powderblue');
 
-                var alist = document.querySelectorAll('a');
-                var i = 0;
-                while (i < alist.length) {
-                    console.log(alist[i]);
-                    alist[i].style.color = 'powderblue';
-                    i += 1;
-                }
-
-            } else {
-                target.style.backgroundColor = 'white';
-                target.style.color = 'black';
-                self.value = 'night';
-
-                var alist = document.querySelectorAll('a');
-                var i = 0;
-                while (i < alist.length) {
-                    console.log(alist[i]);
-                    alist[i].style.color = 'blue';
-                    i += 1;
-                }
+        } else {
+            Body.SetBackgroundColor('white');
+            Body.SetColor('black');
+            self.value = 'night';
+            Links.setColor('blue');
             }
         }
     </script>
 </head>
+
 <body>
     <h1><a href="index.html">WEB</a></h1>
     <input type = "button" value = "night" onclick="
