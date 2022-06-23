@@ -1,6 +1,6 @@
+# 아직 완벽하게는 이해 못함
 
 import sys
-
 
 input = lambda: sys.stdin.readline().rstrip()
 
@@ -18,8 +18,8 @@ s_calculation = 1
 
 for i in range(len(sign)):
 
-    print('s_calculation',sign[i], s_calculation, i)
-    print('answer',sign[i],answer, i)
+    # print('s_calculation',sign[i], s_calculation, i)
+    # print('answer',sign[i],answer, i)
     if sign[i] == '(':
         s_lst.append(sign[i])
         s_calculation *= 2
@@ -29,7 +29,7 @@ for i in range(len(sign)):
         s_calculation *= 3
 
     elif sign[i] == ')':
-        if not s_lst or s_lst[-1] == ']':
+        if not s_lst or s_lst[-1] == '[':
             answer = 0 
             break
         if sign[i-1] == '(':
