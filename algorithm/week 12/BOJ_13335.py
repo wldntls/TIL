@@ -30,10 +30,3 @@ while bridge_len:
             bridge_len.append(0)
 
 print(time)
-
-
-
-
-
-
-

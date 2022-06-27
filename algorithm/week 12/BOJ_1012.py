@@ -1,10 +1,9 @@
 # https://deep-learning-study.tistory.com/615
 
 import sys
-
-input = lambda: sys.stdin.readline().rstrip()
-
-t = input()
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline()
+t = int(input())
 
 def search(x, y):
     if x < 0 or x >= m or y < 0 or y >= n:
