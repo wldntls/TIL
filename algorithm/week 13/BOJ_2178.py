@@ -20,7 +20,7 @@ def bfs(x, y):
             nx = x + dx[i]
             ny = y + dy[i]
 
-            # 미로 찾기 공간을 벗어난 경우 무시
+            # 공간을 벗어난 경우 무시
             if nx < 0 or nx >= n or ny < 0 or ny >= m:
                 continue
 
