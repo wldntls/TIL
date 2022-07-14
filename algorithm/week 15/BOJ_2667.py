@@ -14,7 +14,7 @@ def search(x, y):
     if x < 0 or x >= n or y < 0 or y >= n:
         return
 
-    if map[x][y] == 0: # 탐색한 배추는 0으로 갱신
+    if map[x][y] == 0:
         return
 
     map[x][y] = 0
