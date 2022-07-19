@@ -1,4 +1,4 @@
-# 방법 1(dfs)
+# 방법 1(bfs)
 import sys
 input = lambda: sys.stdin.readline().rstrip()
 

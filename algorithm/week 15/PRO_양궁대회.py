@@ -4,7 +4,7 @@
 def solution(n, info):
     answer = [0 for _ in range(11)]
     tmp = [0 for _ in range(11)] # 라이언이 화살 정보를 저장하기 위한 변수
-    maxDiff = 0 
+    maxDiff = 0
     # 비트단위시프트 연산자
     # 왼쪽 비트시프트(<<)가 될 때는 오른쪽에 0이 주어진 개수만큼 추가 ex) 10 << 1 = 10100 10진수로 20
     # 오른쪽 비트시프트(>>)가 될 때는 왼쪽에 0이나 1이 개수만큼 추가 가장 오른쪽에 있는 1비트는 사라짐 ex) 10 >> 1 = 101 10진수로 5
@@ -30,7 +30,7 @@ def solution(n, info):
             continue
         
         # 0점에 남은 화살 기록
-        tmp[10] = n - cnt   
+        tmp[10] = n - cnt
 
         # 점수가 같은 경우에도 낮은 점수를 맞힌 개수의 값을 출력해야하기 때문에 
         if ryan - apeach == maxDiff:
