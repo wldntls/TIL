@@ -1,39 +1,112 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions } from 'react-native';
+import * as Location from 'expo-location';
 
-// 메인 화면에 가로로 클릭해서 할지?
-// 아니면 스크롤로 내려서 할지?
-// 그리고 추가적인 내용필요 없을지?
-// 
+// 1. 사진 패딩주는 법
+// 2. 사진 라운드로 바꾸기, 그림자 넣는 법?
+//   이미지 크기 고정해야할 필요 있음(DB에 저장할 때)
+// 3. 양조장 이름, 술 이름 크게
+// 4. 오늘의 술 아이콘 이미지?로 넣는 법 구상
+// 5. 추천 시스템 넣을 곳도 공간 만들기!
+// 6. 이외에 다른 것들 넣을 것 있는지?
+// 추천 시스템 주제
+// 일반적인 정보 + 유저 정보 
+// 그림자 없는 버전, 그리고 흰거만 있는 버전 주형님께 보내드리기
+// 주형님께 보내드린 파일 그림자, 그림자 + 그라데이션 버전
+// 크랙?, 지마켓
+// 커뮤니티 메인 화면
+
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function App() {
-  const Tab = createBottomTabNavigator();
-  const BottomTabs = () => {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={Typography_Ex} />
-        <Tab.Screen name="상세페이지" component={O_Dictionary} />
-        <Tab.Screen name="옵션" component={O_Array} />
-      </Tab.Navigator>
-    );
-  };
+  const [city, setCity] = useState("Loding...")
+  const [ok, setOk] = useState(true);
+  const ask = async () => {
+    const { granted } = await Location.requestForegroundPermissionsAsync();
+    if (!granted) {
+      setOk(false)
+    }
+    const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
+    const location = await Location.reverseGeocodeAsync(
+      { latitude, longitude },
+      { useGoogleMap: false })
+    setCity(location[0].city)
+  }
+  useEffect(() => {
+    ask();
+  }, [])
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <View style={styles.location}><Text>{city}</Text></View>
       <ScrollView>
-        <Text style={styles.header}>오늘의 양조장</Text>
+        <Text style={styles.today_brewery}>오늘의 양조장 🏘</Text>
         <ScrollView
-          horizontal>
-          {/* 사진 추가 어떻게? */}
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}>
+          <View style={styles.width}>
+            <Image
+              style={styles.brewery_photo}
+              source={require('/Users/shinjiwoo/TIL/yosul/image/양조장_1.jpg')} />
+            <View style={styles.brewery_info}>
+              {/* DB에서 정보 받을 것 */}
+              <Text>금품 양조장</Text>
+              <Text>주종 : 막걸리</Text>
+              <Text>평일 : 오전 10시 ~ 오후 6시</Text>
+              <Text>주말 : 오전 10시 ~ 오후 6시</Text>
+              <Text>위치</Text>
+            </View>
+          </View>
+          <View style={styles.width}>
+            <Image
+              style={styles.brewery_photo}
+              source={require('/Users/shinjiwoo/TIL/yosul/image/양조장_2.jpg')} />
+            <View style={styles.brewery_info}>
+              {/* DB에서 정보 받을 것 */}
+              <Text>금품 양조장</Text>
+              <Text>주종 : 막걸리</Text>
+              <Text>평일 : 오전 10시 ~ 오후 6시</Text>
+              <Text>주말 : 오전 10시 ~ 오후 6시</Text>
+              <Text>위치</Text>
+            </View>
+          </View>
         </ScrollView>
-        <Text>오늘의 술</Text>
+        <Text style={styles.today_beer}>오늘의 술 🍶</Text>
         <ScrollView
-          horizontal>
-          {/* 사진 추가 어떻게? */}
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}>
+          <View style={styles.width}>
+            <Image
+              style={styles.beer}
+              source={require('/Users/shinjiwoo/TIL/yosul/image/술_1.jpg')} />
+            <View style={styles.beer_info}>
+              {/* DB에서 정보 받을 것 */}
+              <Text>풍정사계</Text>
+              <Text>주종 : 막걸리</Text>
+              <Text>평일 : 오전 10시 ~ 오후 6시</Text>
+              <Text>주말 : 오전 10시 ~ 오후 6시</Text>
+              <Text>위치</Text>
+            </View>
+          </View>
+          <View style={styles.width}>
+            <Image
+              style={styles.beer}
+              source={require('/Users/shinjiwoo/TIL/yosul/image/술_2.jpg')} />
+            <View style={styles.beer_info}>
+              {/* DB에서 정보 받을 것 */}
+              <Text>풍정사계</Text>
+              <Text>주종 : 막걸리</Text>
+              <Text>평일 : 오전 10시 ~ 오후 6시</Text>
+              <Text>주말 : 오전 10시 ~ 오후 6시</Text>
+              <Text>위치</Text>
+            </View>
+          </View>
         </ScrollView>
       </ScrollView>
+      <View style={styles.underbar}><Text>하단바</Text></View>
     </View>
   );
 }
@@ -41,15 +114,51 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 50,
   },
-  header: {
-    justifyContent: "space-between",
+  location: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 55,
+    marginBottom: 15
+  },
+  today_brewery: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingBottom: 20
+  },
+  width: {
     flexDirection: "row",
-    marginTop: 100,
-    fontSize: 40,
-    borderRadius: 30
+    width: SCREEN_WIDTH
+  },
+  brewery_photo: {
+    height: 200,
+    width: 200,
+  },
+  brewery_info: {
+    marginLeft: 30,
+    justifyContent: "center",
+  },
+  today_beer: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingTop: 50,
+    paddingLeft: 20,
+    paddingBottom: 20
+  },
+  beer_photo: {
+    height: 200,
+    width: 200,
+  },
+  beer_info: {
+    marginLeft: 30,
+    justifyContent: "center",
+  },
+  underbar: {
+    marginTop: 35,
+    marginBottom: 35,
+    alignItems: "center",
+    justifyContent: "center",
   }
 });

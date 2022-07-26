@@ -11,7 +11,7 @@ def solution(m, n, board):
                 if t == []:
                     continue
                 
-                if board[i+1][j] == t and board[i][j+1] == t and board[i+1][j+1] == t:
+                if board[i+1][j] == board[i][j+1] == board[i+1][j+1] == t:
                     check.add((i,j))
                     check.add((i+1, j))
                     check.add((i, j+1))
@@ -24,12 +24,15 @@ def solution(m, n, board):
             check = set()
         else:
             return answer
+
+        print(board)
         
         while True:
             moved = 0
             for i in range(m-1):
                 for j in range(n):
-                    if board[i][j] and board[i+1][j] == []:
+                    if board[i][j] and not board[i+1][j]:
+                        print(board[i][j])
                         board[i+1][j] = board[i][j]
                         board[i][j] = []
                         moved = 1
